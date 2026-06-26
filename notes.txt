@@ -1,0 +1,51 @@
+nurse
+special@123
+
+def loginpage(request):
+    if request.user.is_authenticated:
+        return redirect_dashboard(request.user)
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None: #user in not empty
+            login(request, user)
+            return redirect_dashboard(user)
+
+        messages.error(request, 'Invalid username or password.')
+
+    return render(request,'login.html')
+
+def redirect_dashboard(user):
+    role = getattr(getattr(user, 'userprofile', None), 'role', None)
+
+    if user.is_superuser or user.is_staff:
+        return redirect('admin_dashboard')
+
+    dashboard_name = DASHBOARD_BY_ROLE.get(role)
+    if dashboard_name:
+        return redirect(dashboard_name)
+
+    return redirect('login')
+
+def logoutpage(request):
+    logout(request)
+    return redirect('login')
+
+@login_required(login_url='login')
+def admin_dashboard(request):
+    return render(request,'admin_dashboard.html')
+
+@login_required(login_url='login')
+def doctor_dashboard(request):
+    return render(request,'doctor_dashboard.html')
+
+@login_required(login_url='login')
+def nurse_dashboard(request):
+    return render(request,'nurse_dashboard.html')
+
+@login_required(login_url='login')
+def receptionist_dashboard(request):
+    return render(request,'receptionist_dashboard.html')

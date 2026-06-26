@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">Patients List</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Patients List</li>
+            </ol>
+          </div>
+          <!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- Info boxes -->
+        <div class="row">
+
+          <!-- /.col -->
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+
+        <!-- Main row -->
+        <div class="row">
+          <div class="col-12">
+            <!-- /.card -->
+
+            <div class="card bg-dark">
+              <!-- <div class="card-header">
+                <h3 class="card-title">Patients List</h3>
+              </div> -->
+              <!-- /.card-header -->
+              {% if messages %}
+                {% for message in messages %}
+                  <div class="alert {% if message.tag == 'error' %} alert-danger{% else %} alert-success {% endif %}">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+                <!-- /.messages -->
+              <div class="card-body">
+                <table id="{% if request.user.userprofile.role == 'receptionist' %}example1{% else %}example2{% endif %}" class="table table-bordered table-striped ">
+                <!-- <table id="example1" class="table table-bordered table-striped "> -->
+                  <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Symptoms</th>
+                    <th>Severity</th>
+                    {% if request.user.userprofile.role in 'receptionist'   %}
+                    <th>Edit</th>
+                    <th>Delete</th>
+                    {% endif %}
+                    {% if request.user.userprofile.role in 'doctor'   %}
+                    <th>Action</th>
+                    {% endif %}
+                  </tr>
+                  </thead>
+                  <tbody>
+                    {% for patient in patients %}
+                  <tr>
+                    <td>{{patient.name}}</td>
+                    <td>{{patient.age}}
+                    </td>
+                    <td>{{patient.symptoms}}</td>
+                    <td>{{ patient.get_severity_display }}</td>
+                    {% if request.user.userprofile.role in 'receptionist'   %}
+                    <td><a href="{% url 'edit_patient' patient.pk %}" title="Edit {{patient.name}}"><i class="fas fa-user-edit text-warning"></i></a></td>
+                    <td><a href="{% url 'delete_patient' patient.pk %}" title="Delete {{patient.name}}"><i class="fas fa-user-slash text-danger"></i></a></td>
+                    {% endif %}
+                    {% if request.user.userprofile.role in 'doctor'   %}
+                    <td>
+                      <form action="{% url 'update_patient_status' patient.pk %}" method="POST" >
+                        {% csrf_token %}
+                        {% if patient.status == 'waiting' %}
+                        <button type="submit" name="status" value="in_treatment" class="btn btn-warning btn-sm mr-2">Start Treatement</button>
+                        {% elif patient.status == 'in_treatment' %}
+                        <button type="submit" name="status" value="discharged" class="btn btn-primary btn-sm">Discharge</button>
+                        {% else %}
+                        <span class="badge badge-success">Discharged</span>
+                        {% endif %}
+
+                      </form>
+                    </td>
+                    {% endif %}
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Symptoms</th>
+                    <th>Serverity</th>
+                    {% if request.user.userprofile.role in 'receptionist'   %}
+                    <th>Edit Details</th>
+                    <th>Delete Patient</th>
+                    {% endif %}
+                    {% if request.user.userprofile.role in 'doctor'   %}
+                    <th>Action</th>
+                    {% endif %}
+                  </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div><!--/. container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+
+
+
+{% endblock %}

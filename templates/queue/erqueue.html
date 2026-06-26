@@ -1,0 +1,110 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+
+
+
+  <!-- Content Wrapper. Contains page content -->
+  <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row mb-2">
+          <div class="col-sm-6">
+            <h1 class="m-0">ER Queue</h1>
+          </div><!-- /.col -->
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item"><a href="#">Home</a></li>
+              <li class="breadcrumb-item active">Patients ER Queue</li>
+            </ol>
+          </div>
+          <!-- /.col -->
+        </div><!-- /.row -->
+      </div><!-- /.container-fluid -->
+    </div>
+    <!-- /.content-header -->
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="container-fluid">
+        <!-- Info boxes -->
+        <div class="row">
+
+          <!-- /.col -->
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+
+
+        <!-- Main row -->
+        <div class="row">
+          <div class="col-12">
+            <!-- /.card -->
+
+            <div class="card bg-dark">
+              <!-- <div class="card-header">
+                <h3 class="card-title">Patients List</h3>
+              </div> -->
+              <!-- /.card-header -->
+              {% if messages %}
+                {% for message in messages %}
+                  <div class="alert {% if message.tag == 'error' %} alert-danger{% else %} alert-success {% endif %}">
+                    {{ message }}
+                  </div>
+                {% endfor %}
+              {% endif %}
+                <!-- /.messages -->
+              <div class="card-body">
+                <table id="example2" class="table table-bordered table-striped ">
+                  <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Symptoms</th>
+                    <th>Severity</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                    {% for patient in patients %}
+                  <tr>
+                    <td>{{patient.name}}</td>
+                    <td>{{patient.age}}</td>
+                    <td>{{patient.symptoms}}</td>
+                    <td>{{ patient.get_severity_display }}</td>
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+                  <tfoot>
+                  <tr>
+                    <th>Name</th>
+                    <th>Age</th>
+                    <th>Symptoms</th>
+                    <th>Severity</th>
+                  </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+          </div>
+          <!-- /.col -->
+        </div>
+        <!-- /.row -->
+      </div><!--/. container-fluid -->
+    </section>
+    <!-- /.content -->
+  </div>
+  <!-- /.content-wrapper -->
+
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+
+
+
+{% endblock %}
