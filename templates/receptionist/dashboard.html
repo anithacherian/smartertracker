@@ -29,6 +29,14 @@
     <section class="content">
       <div class="container-fluid">
         <!-- Info boxes -->
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-danger">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endif %}
+          <!-- /.messages -->
         <div class="row">
 
           <div class="col-12 col-sm-6 col-md-3">
